@@ -23,6 +23,7 @@ from pytorch_lightning import LightningDataModule, LightningModule, Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint, Callback
 
 from torchsig.utils.narrowband_trainer import NarrowbandTrainer
+from torchsig.utils.narrowband_trainer import MetricsLogger
 
 
 class HybridNarrowbandTrainer(NarrowbandTrainer):
