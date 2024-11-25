@@ -169,7 +169,7 @@ class XCiTClassifier(LightningModule):
         self,
         input_channels: int,
         num_classes: int,
-        xcit_version: str = 'tiny_12_p16_224',
+        xcit_version: str = 'tiny_12_p16_224', # changed from tiny_12_p16_224
         ds_method: str = 'downsample',
         ds_rate: int = 16,
         learning_rate: float = 1e-3,
