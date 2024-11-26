@@ -1,4 +1,4 @@
-torchsig.utils.yolo\_train.TorchsigDataset
+﻿torchsig.utils.yolo\_train.TorchsigDataset
 ==========================================
 
 .. currentmodule:: torchsig.utils.yolo_train
@@ -20,6 +20,7 @@ torchsig.utils.yolo\_train.TorchsigDataset
       ~TorchsigDataset.cache_images
       ~TorchsigDataset.cache_images_to_disk
       ~TorchsigDataset.cache_labels
+      ~TorchsigDataset.check_cache_disk
       ~TorchsigDataset.check_cache_ram
       ~TorchsigDataset.close_mosaic
       ~TorchsigDataset.collate_fn

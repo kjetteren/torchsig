@@ -1,4 +1,4 @@
-torchsig.image\_datasets.datasets
+﻿torchsig.image\_datasets.datasets
 =================================
 
 .. automodule:: torchsig.image_datasets.datasets
@@ -27,6 +27,7 @@ torchsig.image\_datasets.datasets
    :recursive:
 
    composites
+   dataset_generation
    file_loading_datasets
    protocols
    synthetic_signals
