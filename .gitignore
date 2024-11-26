@@ -5,7 +5,6 @@ build/
 checkpoints/
 lightning_logs/
 dist/
-docs/
 **.ipynb_checkpoints**
 **.pytest_cache
 *.benchmarks/
@@ -27,6 +26,3 @@ examples/runs
 examples/datasets
 examples/yolo
 examples/plots
-
-# VS Code
-torchsig.code-workspace
