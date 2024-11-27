@@ -223,7 +223,7 @@ class NarrowbandTrainer:
                 'num_classes': self.num_classes,
                 'xcit_version': 'xcit_nano_12_p16_224', # Changed from tiny_12_p16_224
                 'ds_method': 'downsample',
-                'ds_rate': 2, # Changed from 16
+                'ds_rate': 1, # Changed from 16
                 'learning_rate': self.learning_rate,
             }
         elif self.model_name == 'inception':
