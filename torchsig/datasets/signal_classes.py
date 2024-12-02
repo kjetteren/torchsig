@@ -181,6 +181,7 @@ class torchsig_signals():
     fm_signals = []
     lfm_signals = []
     chirpss_signals = []
+    boc_signals = []
     
     # automatic grouping of each signal into a specific class
     for name in class_list:
@@ -198,6 +199,8 @@ class torchsig_signals():
             lfm_signals.append(name)
         elif ('chirpss' == name):
             chirpss_signals.append(name)
+        elif ('boc' == name):
+            boc_signals.append(name)
 
     # specifically designed lists
     ofdm_subcarrier_modulations = ["bpsk", "qpsk", "16qam", "64qam", "256qam", "1024qam"]
