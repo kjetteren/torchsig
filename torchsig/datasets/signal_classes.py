@@ -65,6 +65,7 @@ CLASS_FAMILY_DICT: Dict[str, str] = {
     "lfm_data": "chirp",
     "lfm_radar": "chirp",
     "chirpss": "chirp",
+    "boc": "boc",
 }
 
 SIGNALS_SHARED_LIST: list = [
@@ -129,6 +130,7 @@ SIGNALS_SHARED_LIST: list = [
         "lfm_data",
         "lfm_radar",
         "chirpss",
+        "boc",
     ]
 
 # list for radio ML 2018 dataset
