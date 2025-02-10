@@ -1,4 +1,4 @@
-﻿torchsig.models.iq\_models.inceptiontime.inceptiontime.FocalLoss
+torchsig.models.iq\_models.inceptiontime.inceptiontime.FocalLoss
 ================================================================
 
 .. currentmodule:: torchsig.models.iq_models.inceptiontime.inceptiontime
