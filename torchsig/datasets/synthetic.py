@@ -154,6 +154,7 @@ class ModulateNarrowbandDataset(ConcatDataset):
         am_list = [m for m in map(str.lower, modulations) if m in torchsig_signals.am_signals]
         lfm_list = [m for m in map(str.lower, modulations) if m in torchsig_signals.lfm_signals]
         chirpss_list = [m for m in map(str.lower, modulations) if m in torchsig_signals.chirpss_signals]
+        boc_list = [m for m in map(str.lower, modulations) if m in torchsig_signals.boc_signals]
 
         const_dataset = ConstellationDataset(
             constellations=constellation_list,
