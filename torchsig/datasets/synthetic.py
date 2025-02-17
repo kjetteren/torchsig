@@ -210,7 +210,15 @@ class ModulateNarrowbandDataset(ConcatDataset):
             **kwargs,
         )
 
-        super(ModulateNarrowbandDataset, self).__init__([const_dataset, fsk_dataset, fm_dataset, am_dataset, lfm_dataset, chirpss_dataset])
+        boc_dataset = BOCDataset(
+            modulations=boc_list,
+            num_iq_samples=num_iq_samples,
+            num_samples_per_class=num_samples_per_class,
+            random_data=random_data,
+            **kwargs,
+        )
+
+        super(ModulateNarrowbandDataset, self).__init__([const_dataset, fsk_dataset, fm_dataset, am_dataset, lfm_dataset, chirpss_dataset, boc_dataset])
 
 class SyntheticDataset(SignalDataset):
     def __init__(self, **kwargs) -> None:
