@@ -821,6 +821,137 @@ class OFDMDataset(SyntheticDataset):
             np.random.set_state(orig_state)  # return numpy back to its previous state
 
         return output[0:self.num_iq_samples]
+    
+
+class BOCDataset(SyntheticDataset):
+    def __init__(
+        self,
+        modulations: Optional[Union[List, Tuple]] = torchsig_signals.boc_signals,
+        num_iq_samples: int = 100,
+        num_samples_per_class: int = 100,
+        random_data: bool = False,
+        center_freq: float = 0,
+        bandwidth: float = 0.5,
+        subcarrier_freq: float = 1.023e6,  # Example subcarrier frequency
+        chip_rate: float = 1.023e6,  # Example chip rate
+        **kwargs,
+    ):
+        super(BOCDataset, self).__init__(**kwargs)
+        self.num_iq_samples = num_iq_samples
+        self.num_samples_per_class = num_samples_per_class
+        self.modulations = list(torchsig_signals.boc_signals) if modulations is None else modulations
+        self.random_data = random_data
+        self.center_freq = center_freq
+        self.bandwidth = bandwidth
+        self.subcarrier_freq = subcarrier_freq
+        self.chip_rate = chip_rate
+        self.index = []
+
+        for const_idx, const_name in enumerate(map(str.lower, self.modulations)):
+            for idx in range(self.num_samples_per_class):
+                meta = ModulatedRFMetadata(
+                    sample_rate=0.0,
+                    num_samples=self.num_iq_samples,
+                    complex=True,
+                    lower_freq=center_freq-(bandwidth/2),
+                    upper_freq=center_freq+(bandwidth/2),
+                    center_freq=center_freq,
+                    bandwidth=bandwidth,
+                    start=0.0,
+                    stop=1.0,
+                    duration=1.0,
+                    snr=0.0,
+                    bits_per_symbol=0.0,
+                    samples_per_symbol=0.0,
+                    class_name=const_name,
+                    class_index=const_idx,
+                    excess_bandwidth=0.0,
+                )
+                self.index.append(
+                    (
+                        const_name,
+                        const_idx * self.num_samples_per_class + idx,
+                        [meta],
+                    )
+                )
+    
+    def __len__(self) -> int:
+        return len(self.index)
+
+    def _generate_samples(self, item: Tuple) -> np.ndarray:
+        index = item[1]
+        metadata = item[2][0]
+        center_freq = metadata["center_freq"]
+        bandwidth = metadata["bandwidth"]
+
+        orig_state = np.random.get_state()
+        if not self.random_data:
+            np.random.seed(index)
+
+        boc_signal = bocmod_random(1, 1, self.num_iq_samples)
+
+        # Upconvert if center_freq != 0
+        if center_freq != 0:
+            n = np.arange(len(boc_signal))
+            boc_signal *= np.exp(2j * np.pi * center_freq * n)
+
+            # Optional anti-aliasing filter if it exceeds ±0.5
+            upper_edge = center_freq + (bandwidth / 2)
+            lower_edge = center_freq - (bandwidth / 2)
+            if upper_edge > 0.5 or lower_edge < -0.5:
+                boc_signal = upconversionAntiAliasingFilter(boc_signal, center_freq, bandwidth)
+
+        # Resampling does not work
+        # Resample if desired bandwidth differs from the BOC rate
+        # (resample to match "bandwidth")
+        #desired_rate = bandwidth
+        #native_rate = self.chip_rate
+        #resample_rate = desired_rate / native_rate
+        #if resample_rate != 1.0:
+        #    boc_signal = rational_rate_resampler(boc_signal, resample_rate)
+
+        if not self.random_data:
+            np.random.set_state(orig_state)  # return numpy back to its previous state
+
+        return boc_signal[0:self.num_iq_samples]
+    
+
+def bocmod_random(m: int, n: int, num_bits: int = 100, halfcyclesps: int = 2, phasing: str = "sin") -> np.ndarray:
+    # Compute kBOC and validate it's an integer
+    kBOC_float = 2 * m / n
+    if abs(kBOC_float - round(kBOC_float)) < 1e-5:
+        kBOC = int(round(kBOC_float))
+    else:
+        raise ValueError("2*m/n must be an integer.")
+
+    # Sub-carrier frequency and sample timing
+    fs = m * 1.023e6
+    Ts = 1 / (2 * fs)
+    time_per_sample = Ts / halfcyclesps
+    epsilon = time_per_sample / 100.0
+
+    # Generate time vector to construct the square wave
+    total_samples = kBOC * halfcyclesps * num_bits
+    t = np.arange(total_samples) * time_per_sample + epsilon
+
+    # Generate square wave using the selected phasing
+    if phasing == "sin":
+        square_wave = np.sign(np.sin(2 * np.pi * fs * t))
+    elif phasing == "cos":
+        square_wave = np.sign(np.cos(2 * np.pi * fs * t))
+    else:
+        raise ValueError("Invalid phasing. Must be 'sin' or 'cos'.")
+
+    # Generate random binary data bits (0 or 1) and convert to bipolar (-1, +1)
+    bipolar = np.random.choice([-1, 1], size=(num_bits,))
+
+    # Upsample bits by repeating each bit kBOC*halfcyclesps times
+    upsampled = np.repeat(bipolar, kBOC * halfcyclesps)
+
+    # Modulate: multiply the upsampled bits with the square wave
+    y = upsampled * square_wave
+    y = y.astype(np.complex128)
+    return y
 
 
 def getFSKFreqMap ( ):
