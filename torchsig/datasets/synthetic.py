@@ -900,8 +900,7 @@ class BOCDataset(SyntheticDataset):
 
         # Upconvert if center_freq != 0
         if center_freq != 0:
-            n = np.arange(len(boc_signal))
-            boc_signal *= np.exp(2j * np.pi * center_freq * n)
+            boc_signal *= np.exp(2j * np.pi * center_freq * np.arange(0,len(boc_signal)))
 
             # Optional anti-aliasing filter if it exceeds ±0.5
             upper_edge = center_freq + (bandwidth / 2)
