@@ -221,9 +221,9 @@ class NarrowbandTrainer:
             model_kwargs = {
                 'input_channels': self.input_channels,
                 'num_classes': self.num_classes,
-                'xcit_version': 'xcit_nano_12_p16_224', # Changed from tiny_12_p16_224
+                'xcit_version': 'xcit_nano_12_p16_224',
                 'ds_method': 'downsample',
-                'ds_rate': 1, # Changed from 16
+                'ds_rate': 16,
                 'learning_rate': self.learning_rate,
             }
         elif self.model_name == 'inception':
