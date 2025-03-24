@@ -7,6 +7,7 @@ from .fsk import FSKSignalBuilder
 from .lfm import LFMSignalBuilder
 from .chirpss import ChirpSSSignalBuilder
 from .ofdm import OFDMSignalBuilder
+from .boc import BOCSignalBuilder
 
 __all__ = [
     "ToneSignalBuilder",
@@ -18,4 +19,5 @@ __all__ = [
     "LFMSignalBuilder",
     "ChirpSSSignalBuilder",
     "OFDMSignalBuilder",
+    "BOCSignalBuilder",
 ]

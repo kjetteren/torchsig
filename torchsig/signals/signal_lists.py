@@ -67,7 +67,10 @@ CLASS_FAMILY_DICT: Dict[str, str] = {
     "lfm_data": "chirp",
     "lfm_radar": "chirp",
     "chirpss": "chirp",
-    "tone": "tone"
+    "tone": "tone",
+    "boc(1,1)": "boc",
+    "boc(10,5)": "boc",
+    "tmboc(6,1,4/33)": "boc",
 }
 
 SIGNALS_SHARED_LIST: list = [
@@ -128,6 +131,9 @@ SIGNALS_SHARED_LIST: list = [
         "lfm_radar",
         "chirpss",
         "tone",
+        "boc(1,1)",
+        "boc(10,5)",
+        "tmboc(6,1,4/33)",
     ]
 
 FAMILY_SHARED_LIST: list = sorted(list(set(CLASS_FAMILY_DICT.values())))
@@ -177,6 +183,7 @@ class TorchSigSignalLists():
         lfm_signals (list[str]): Linearly frequency modulated signals, includes LFM data and LFM radar
         chirpss_signals (list[str]): Chirp spread-spectrum signal
         tone_signals (list[str]): Tone signal
+        boc_signals (list[str]): Binary offset carrier signals
 
     Example:
         Access this list::
@@ -197,12 +204,14 @@ class TorchSigSignalLists():
     lfm_signals = []
     chirpss_signals = []
     tone_signals = []
+    boc_signals = []
 
     fsk_names = ['fsk', 'msk']
     ofdm_names = ['ofdm']
     constellation_names = ['ask', 'qam', 'psk', 'ook']
     am_names = ['am-dsb', 'am-lsb', 'am-usb']
     lfm_names = ['lfm_']
+    boc_names = ['boc']
     
     # automatic grouping of each signal into a specific class
     for name in all_signals:
@@ -222,9 +231,14 @@ class TorchSigSignalLists():
             chirpss_signals.append(name)
         elif 'tone' == name:
             tone_signals.append(name)
+        elif check_signal_class(name, boc_names):
+            boc_signals.append(name)
 
     # specifically designed lists
     ofdm_subcarrier_modulations = ["bpsk", "qpsk", "16qam", "64qam", "256qam", "1024qam"]
+
+    # custom signal classes
+    gnss_signals = ["boc(10,5)", "boc(1,1)", "tmboc(6,1,4/33)", "bpsk"]
 
 
 @dataclass
