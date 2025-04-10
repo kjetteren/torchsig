@@ -11,6 +11,7 @@ from torchsig.utils.dsp import (
     pad_head_tail_to_length,
 )
 from torchsig.signals.signal_lists import TorchSigSignalLists
+from torchsig.transforms.functional import channel_swap
 
 # Third Party
 import numpy as np
@@ -183,6 +184,8 @@ def boc_modulator ( class_name:str, bandwidth:float, sample_rate:float, num_samp
         num_bits = int(np.ceil(num_samples_baseband / 24))
         # Generate baseband using bocmod_random; it returns num_bits * 24 samples.
         boc_signal_baseband = tmbocmod_random(num_bits = num_bits, rng = rng)
+        # Converting the TMBOC signal to the Q channel as specified in the GNSS L1C standard.
+        boc_signal_baseband = channel_swap(boc_signal_baseband)
     else:
         raise ValueError(f"Unsupported BOC variant: {class_name}")
 
