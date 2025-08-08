@@ -53,7 +53,7 @@ def chirpss_modulator_baseband ( class_name:str, max_num_samples:int, oversampli
     sample_rate = 1.0
 
     # randomize the number of samples per symbol
-    samples_per_symbol = rng.integers(low=128,high=4096)
+    samples_per_symbol = rng.integers(low=128,high=512)
 
     # calculate bandwidth
     bandwidth = sample_rate/oversampling_rate_nominal
