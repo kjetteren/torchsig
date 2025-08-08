@@ -214,14 +214,9 @@ class ConstellationSignalBuilder(SignalBuilder):
         bandwidth = self._signal.metadata.bandwidth
         num_iq_samples_signal = self._signal.metadata.duration_in_samples
 
-        # randomize pulse shape selection
-        if self.random_generator.integers(0,2) == 0:
-            pulse_shape_name = 'srrc'
-            # randomize alpha_rolloff
-            alpha_rolloff = self.random_generator.uniform(0.1,0.5)
-        else:
-            pulse_shape_name = 'rectangular'
-            alpha_rolloff = None
+        # GNSS BPSK signals use rectangular pulse shaping exclusively
+        pulse_shape_name = 'rectangular'
+        alpha_rolloff = None
 
         # modulate waveform to complex baseband
         self._signal.data = constellation_modulator(
